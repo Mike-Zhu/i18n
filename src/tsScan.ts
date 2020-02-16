@@ -8,6 +8,7 @@ import { CompilerOptions, createPrinter, createProgram, EmitHint, transform, Typ
 
 import { isImportDeclaration, isStringLiteral, SourceFile, updateSourceFileNode } from 'typescript'
 
+// add a express
 interface WordInfo {
     content: string;
     filename: string;
