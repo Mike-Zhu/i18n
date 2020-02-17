@@ -9,7 +9,7 @@ import { CompilerOptions, createPrinter, createProgram, EmitHint, transform, Typ
 import { isImportDeclaration, isStringLiteral, SourceFile, updateSourceFileNode } from 'typescript'
 
 // add a express
-interface WordInfo {
+export interface WordInfo {
     content: string;
     filename: string;
     start: number;
@@ -57,7 +57,7 @@ export default function tsScan(fileList: string[]) {
                 node.kind === ts.SyntaxKind.JsxText
                 || node.kind === ts.SyntaxKind.StringLiteral
                 || node.kind === ts.SyntaxKind.TemplateExpression
-                || node.kind === ts.SyntaxKind.JsxExpression
+                // || node.kind === ts.SyntaxKind.JsxExpression
             ) {
                 const text = node.getFullText()
                 if (isZh(text)) {
