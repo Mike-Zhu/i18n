@@ -84,17 +84,8 @@ export default function tsScan(fileList: string[]) {
     }
     const sourceFiles = program.getSourceFiles()!;
     sourceFiles.forEach(sourceFile => {
-        const result = transform(sourceFile, [scanWord(typeChecker, sourceFile.fileName)])
+        transform(sourceFile, [scanWord(typeChecker, sourceFile.fileName)])
         return
     })
-    // fileList.forEach(filename => {
-    //     const sourceFile = program.getSourceFile(filename)!;
-    //     console.log({
-    //         filename,
-    //         sourceFile
-    //     })
-    //     const result = transform(sourceFile, [scanWord(typeChecker, filename)])
-    //     return
-    // });
     return wordList;
 }

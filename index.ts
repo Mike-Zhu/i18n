@@ -9,53 +9,20 @@ export default function scan(fileNmae: string) {
   exportFile(zhObject)
 }
 
+function getSheet(zhObjectList: WordInfo[]) {
+  const sheet = xlsx.utils.json_to_sheet(zhObjectList)
+  return sheet
+}
+
 function exportFile(zhObjectList: WordInfo[]) {
   if (zhObjectList.length === 0) {
     throw new Error('搜索数据为空!')
   }
-
-  let _headers = Object.keys(zhObjectList[0])
-  let headers = _headers.map((v, i) => {
-    return {
-      v,
-      position: String.fromCharCode(65 + i) + 1
-    }
-  })
-    .reduce((prev, next) => ({
-      ...prev,
-      [next.position]: {
-        v: next.v
-      }
-    }), {})
-
-  let data = zhObjectList
-    .map((value, index) => _headers.map((key, jIndex) => {
-      return {
-        v: value[key],
-        position: String.fromCharCode(65 + jIndex) + (index + 2)
-      }
-    })
-    )
-    .reduce((prev, next) => prev.concat(next))
-    .reduce((prev, next) => ({
-      ...prev,
-      [next.position]: {
-        v: next.v
-      }
-    }), {})
-  // 合并 headers 和 data
-  var output = Object.assign({}, headers, data);
-  // 获取所有单元格的位置
-  var outputPos = Object.keys(output);
-  // 计算出范围
-  var ref = outputPos[0] + ':' + outputPos[outputPos.length - 1];
+  let sheet1 = getSheet(zhObjectList)
   let wb = {
     SheetNames: ['sheet1'],
     Sheets: {
-      "sheet1": {
-        "!ref": ref,
-        ...output
-      }
+      sheet1
     }
   } as xlsx.WorkBook
 
