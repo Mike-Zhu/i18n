@@ -6,8 +6,7 @@ import * as xlsx from 'xlsx'
 export default function scan(fileNmae: string) {
   const list = getDir(path.join(__dirname + fileNmae), [])
   const zhObject = tsScan(list)
-  exportFile(zhObject.slice(0, 10))
-  // fs.writeFileSync("union.json", JSON.stringify(zhObject));
+  exportFile(zhObject)
 }
 
 function exportFile(zhObjectList: WordInfo[]) {
@@ -52,13 +51,12 @@ function exportFile(zhObjectList: WordInfo[]) {
   var outputPos = Object.keys(output);
   // 计算出范围
   var ref = outputPos[0] + ':' + outputPos[outputPos.length - 1];
-  console.log({ ref })
   let wb = {
     SheetNames: ['sheet1'],
     Sheets: {
       "sheet1": {
         "!ref": ref,
-        output
+        ...output
       }
     }
   } as xlsx.WorkBook

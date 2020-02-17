@@ -14,5 +14,7 @@ npm-debug.log
 .vscode
 _site
 mock/test.json
-./union.json
-./yarn.lock
+
+union.json
+yarn.lock
+scan.xlsx
