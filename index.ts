@@ -13,7 +13,7 @@ function exportFile(zhObjectList: WordInfo[]) {
   if (zhObjectList.length === 0) {
     throw new Error('搜索数据为空!')
   }
-  console.log('now i get data')
+
   let _headers = Object.keys(zhObjectList[0])
   let headers = _headers.map((v, i) => {
     return {
@@ -27,8 +27,6 @@ function exportFile(zhObjectList: WordInfo[]) {
         v: next.v
       }
     }), {})
-
-  console.log('now i get ')
 
   let data = zhObjectList
     .map((value, index) => _headers.map((key, jIndex) => {
@@ -60,9 +58,8 @@ function exportFile(zhObjectList: WordInfo[]) {
       }
     }
   } as xlsx.WorkBook
-  console.log('im writing')
+
   xlsx.writeFile(wb, 'scan.xlsx')
-  console.log('write completed')
 }
 
 function getFile(fileName: string, fileList: string[]) {
