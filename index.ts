@@ -9,16 +9,11 @@ export default function scan(fileNmae: string) {
   exportFile(zhObject)
 }
 
-function getSheet(zhObjectList: WordInfo[]) {
-  const sheet = xlsx.utils.json_to_sheet(zhObjectList)
-  return sheet
-}
-
 function exportFile(zhObjectList: WordInfo[]) {
   if (zhObjectList.length === 0) {
     throw new Error('搜索数据为空!')
   }
-  let sheet1 = getSheet(zhObjectList)
+  let sheet1 = xlsx.utils.json_to_sheet(zhObjectList)
   let wb = {
     SheetNames: ['sheet1'],
     Sheets: {
