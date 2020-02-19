@@ -3,13 +3,13 @@ import * as path from 'path'
 import tsScan, { WordInfo } from './src/tsScan'
 import * as xlsx from 'xlsx'
 
-export default function scan(fileNmae: string) {
+export default function scan(fileNmae: string, output: string) {
   const list = getDir(path.join(__dirname + fileNmae), [])
   const zhObject = tsScan(list)
-  exportFile(zhObject)
+  exportFile(zhObject, output)
 }
 
-function exportFile(zhObjectList: WordInfo[]) {
+function exportFile(zhObjectList: WordInfo[], output: string) {
   if (zhObjectList.length === 0) {
     throw new Error('搜索数据为空!')
   }
@@ -21,7 +21,7 @@ function exportFile(zhObjectList: WordInfo[]) {
     }
   } as xlsx.WorkBook
 
-  xlsx.writeFile(wb, 'scan.xlsx')
+  xlsx.writeFile(wb, `${output}.xlsx`)
 }
 
 function getFile(fileName: string, fileList: string[]) {
@@ -48,4 +48,4 @@ function getDir(pathName: string, fileList: string[]) {
   })
   return _fileList
 }
-scan('/codes')
+scan('/codes', 'scan')
