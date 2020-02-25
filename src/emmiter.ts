@@ -1,13 +1,10 @@
 import * as ts from 'typescript'
-import { createProgram, transform, TypeChecker, TransformationContext } from 'typescript'
+import * as fs from 'fs'
+import { CompilerOptions, createPrinter, createProgram, EmitHint, transform, TypeChecker, TransformationContext } from 'typescript'
 import { SourceFile } from 'typescript'
 import { WordInfo, validKindList, WordMap, createNodeList } from './utils'
-
+import * as prettier from 'prettier';
 export default function tsEmmiter(fileList: string[], wordMap: WordMap) {
-  console.log({
-    fileList,
-    wordMap
-  })
   var cmd = ts.parseCommandLine(fileList); // replace with target file
   // Create the program
   let program = createProgram(cmd.fileNames, cmd.options);
@@ -39,8 +36,6 @@ export default function tsEmmiter(fileList: string[], wordMap: WordMap) {
   ) => (sourceFile: SourceFile) => {
     const wordList = wordMap[filename];
 
-    const isZh = (text) => /[\u4e00-\u9fa5]/.test(text)
-
     const visitor = (node: ts.Node): any => {
 
       if (
@@ -68,7 +63,24 @@ export default function tsEmmiter(fileList: string[], wordMap: WordMap) {
   }
   const sourceFiles = program.getSourceFiles()!;
   sourceFiles.forEach(sourceFile => {
-    transform(sourceFile, [scanWord(typeChecker, sourceFile.fileName)])
-    return
+    if (!fileList.includes(sourceFile.fileName)) {
+      return
+    }
+    let result = transform(sourceFile, [scanWord(typeChecker, sourceFile.fileName)])
+    var printer = createPrinter({});
+    const printed = printer.printNode(
+      EmitHint.SourceFile,
+      result.transformed[0],
+      sourceFile
+    )
+    const res = prettier.format(printed, {
+      semi: true,
+      singleQuote: true,
+      trailingComma: 'es5',
+      bracketSpacing: true,
+      parser: 'typescript',
+    })
+
+    fs.writeFileSync(sourceFile.fileName, res);
   })
 }

@@ -7,6 +7,7 @@ export interface WordInfo {
   start: number;
   end: number;
   kind: number;
+  replace: string;
 }
 
 export interface WordMap {
@@ -40,15 +41,14 @@ type CreateNode = (node: ts.Node, word: WordInfo) => ts.Node;
 
 function CreateJSX(node, word) {
   return ts.createJsxText(
-    word.content + 'TM替换了',
-    false
+    word.replace
   )
 }
 
 
 function CreateString(node, word) {
   return ts.createStringLiteral(
-    word.content + 'TM替换了'
+    word.replace
   )
 }
 

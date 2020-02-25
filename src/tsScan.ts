@@ -51,7 +51,8 @@ export default function tsScan(fileList: string[]) {
                         filename: filename,
                         start: start,
                         end: end,
-                        kind: node.kind
+                        kind: node.kind,
+                        replace: ""
                     })
                 }
                 return node;
