@@ -1,14 +1,15 @@
 import * as XLSX from 'xlsx'
 import * as path from 'path'
-import { remoeDuplicate, WordInfo } from './utils'
+import { remoeDuplicate, WordInfo, WordMap } from './utils'
+import emmiter from './emmiter'
 
 
 export default function transfer(excelPath: string) {
   try {
     const wordList = readExcel(excelPath);
-    const fileNameList = remoeDuplicate(wordList.map(word => word.filename))
-
-    
+    const wordMap = getWordMap(wordList);
+    const filenameList = Object.keys(wordMap);
+    emmiter(filenameList, wordMap)
   } catch (e) {
     console.log(e)
   }
@@ -30,4 +31,14 @@ function readExcel(pathName): WordInfo[] {
   const ValidSheet: XLSX.WorkSheet = Sheets[validSheet[0]];
   const list = XLSX.utils.sheet_to_json<WordInfo>(ValidSheet);
   return list
+}
+
+function getWordMap(wordList) {
+  const ret = {} as WordMap;
+  wordList.forEach((word: WordInfo) => {
+    let { filename } = word;
+    ret[filename] = ret[filename] || []
+    ret[filename].push(word)
+  })
+  return ret;
 }

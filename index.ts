@@ -13,7 +13,6 @@ function CutsomTransfer(codes: string, input: string) {
   transfer(_input);
 }
 
-CutsomScan("/test", '/scantest')
+CutsomTransfer("/test", '/scantest.xlsx')
 
 
-CutsomScan("/test", '/scantest')

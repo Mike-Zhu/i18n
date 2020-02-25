@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 import { createProgram, transform, TypeChecker, TransformationContext } from 'typescript'
 import { SourceFile } from 'typescript'
-import { WordInfo } from './utils'
+import { WordInfo, validKindList } from './utils'
 
 export default function tsScan(fileList: string[]) {
     var cmd = ts.parseCommandLine(fileList); // replace with target file
@@ -40,10 +40,7 @@ export default function tsScan(fileList: string[]) {
         const visitor = (node: ts.Node): any => {
 
             if (
-                node.kind === ts.SyntaxKind.JsxText
-                || node.kind === ts.SyntaxKind.StringLiteral
-                || node.kind === ts.SyntaxKind.TemplateExpression
-                // || node.kind === ts.SyntaxKind.JsxExpression
+                validKindList.includes(node.kind)
             ) {
                 const text = node.getFullText()
                 if (isZh(text)) {
