@@ -1,21 +1,7 @@
 import * as ts from 'typescript'
-import * as fs from 'fs'
-import * as path from 'path'
-import prettier from 'prettier'
-
-import { CompilerOptions, createPrinter, createProgram, EmitHint, transform, TypeChecker, TransformationContext } from 'typescript'
-
-
-import { isImportDeclaration, isStringLiteral, SourceFile, updateSourceFileNode } from 'typescript'
-
-// add a express
-export interface WordInfo {
-    content: string;
-    filename: string;
-    start: number;
-    end: number;
-    kind: number;
-}
+import { createProgram, transform, TypeChecker, TransformationContext } from 'typescript'
+import { SourceFile } from 'typescript'
+import { WordInfo } from './utils'
 
 export default function tsScan(fileList: string[]) {
     var cmd = ts.parseCommandLine(fileList); // replace with target file

@@ -1,51 +1,19 @@
-import * as fs from 'fs'
+import scan from './src/scan';
+import transfer from './src/transfer';
 import * as path from 'path'
-import tsScan, { WordInfo } from './src/tsScan'
-import * as xlsx from 'xlsx'
 
-export default function scan(fileNmae: string, output: string) {
-  const list = getDir(path.join(__dirname + fileNmae), [])
-  const zhObject = tsScan(list)
-  exportFile(zhObject, output)
+function CutsomScan(codes: string, out: string) {
+  let dirPath = path.join(__dirname + codes)
+  let output = path.join(__dirname + out)
+  scan(dirPath, output)
 }
 
-function exportFile(zhObjectList: WordInfo[], output: string) {
-  if (zhObjectList.length === 0) {
-    throw new Error('搜索数据为空!')
-  }
-  let sheet1 = xlsx.utils.json_to_sheet(zhObjectList)
-  let wb = {
-    SheetNames: ['sheet1'],
-    Sheets: {
-      sheet1
-    }
-  } as xlsx.WorkBook
-
-  xlsx.writeFile(wb, `${output}.xlsx`)
+function CutsomTransfer(codes: string, input: string) {
+  let _input = path.join(__dirname + input)
+  transfer(_input);
 }
 
-function getFile(fileName: string, fileList: string[]) {
-  let _fileList = fileList.slice();
-  const TSValid = /.[t|j]s(x?)$/
-  if (TSValid.test(fileName)) {
-    _fileList.push(fileName)
-  }
-  return _fileList
-}
+CutsomScan("/test", '/scantest')
 
-function getDir(pathName: string, fileList: string[]) {
-  const files = fs.readdirSync(pathName);
-  let _fileList = fileList.slice();
-  files.forEach(fileName => {
-    const innerName = path.join(pathName, fileName);
-    const stats = fs.statSync(innerName);
-    const isDir = stats.isDirectory();
-    if (isDir) {
-      _fileList = getDir(innerName, _fileList)
-    } else {
-      _fileList = getFile(innerName, _fileList)
-    }
-  })
-  return _fileList
-}
-scan('/codes', 'scan')
+
+CutsomScan("/test", '/scantest')
