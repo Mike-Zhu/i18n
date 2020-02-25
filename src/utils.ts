@@ -1,5 +1,7 @@
 
 import * as ts from 'typescript'
+import config from '../config'
+
 // add a express
 export interface WordInfo {
   content: string;
@@ -35,21 +37,21 @@ export const validKindList = [
   ts.SyntaxKind.JsxText,
   ts.SyntaxKind.StringLiteral,
   ts.SyntaxKind.TemplateExpression,
+  ts.SyntaxKind.JsxExpression,
 ]
 
 type CreateNode = (node: ts.Node, word: WordInfo) => ts.Node;
 
 function CreateJSX(node, word) {
-  return ts.createJsxText(
-    word.replace
+  return ts.createJsxExpression(
+    undefined,
+    CreateProperties(config.varibleName + '.' + word.replace)
   )
 }
 
 
 function CreateString(node, word) {
-  return ts.createStringLiteral(
-    word.replace
-  )
+  return CreateProperties(config.varibleName + '.' + word.replace)
 }
 
 function CreateTemplateExpression(node, word) {
