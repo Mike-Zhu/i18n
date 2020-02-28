@@ -47,14 +47,17 @@ export default function tsScan(fileList: string[]) {
                 node.kind === ts.SyntaxKind.JsxText
                 || node.kind === ts.SyntaxKind.StringLiteral
                 || node.kind === ts.SyntaxKind.TemplateExpression
-                // || node.kind === ts.SyntaxKind.JsxExpression
             ) {
-                const text = node.getFullText()
+                let text = node.getFullText().trim();
                 if (isZh(text)) {
                     const start = node.getFullStart();
                     const end = start + node.getFullWidth();
+                    if (node.kind === ts.SyntaxKind.StringLiteral || node.kind === ts.SyntaxKind.TemplateExpression) {
+                        // 需要掐头去尾，去除引号和反引号
+                        text = text.slice(1, text.length - 1);
+                    }
                     wordList.push({
-                        content: text.trim(),
+                        content: text,
                         filename: filename,
                         start: start,
                         end: end,
