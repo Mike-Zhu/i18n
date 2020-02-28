@@ -17,4 +17,4 @@ mock/test.json
 
 union.json
 yarn.lock
-scan.xlsx
+*.xlsx
