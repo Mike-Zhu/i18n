@@ -55,7 +55,7 @@ function CreateString(node, word) {
 }
 
 function CreateTemplateExpression(node, word) {
-  // ts.updateTemplateExpression
+  ts.createJsxExpression
   return ts.createTemplateExpression(
     ts.createTemplateHead(
       "我似中文ID: ",

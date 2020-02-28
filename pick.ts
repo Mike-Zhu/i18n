@@ -8,6 +8,6 @@ function CutsomScan(codes: string, out: string) {
   scan(dirPath, output)
 }
 
-CutsomScan("/test", '/scantest')
+CutsomScan("/codes", '/test')
 
 
