@@ -2,15 +2,19 @@ import * as ts from 'typescript'
 import { createProgram, transform, TypeChecker, TransformationContext } from 'typescript'
 import { SourceFile } from 'typescript'
 import { WordInfo } from './utils'
+import * as path from 'path'
 
 export default function tsScan(fileList: string[]) {
-    var cmd = ts.parseCommandLine(fileList); // replace with target file
+    const cmd = ts.parseCommandLine(fileList); // replace with target file
     // Create the program
-    let program = createProgram(cmd.fileNames, cmd.options);
+    const program = createProgram(cmd.fileNames, { ...cmd.options, allowJs: true });
     const typeChecker = program.getTypeChecker();
     const wordList: WordInfo[] = [];
-
-
+    const nameMap = {};
+    fileList.forEach(fileName => {
+        const _road = fileName.split(path.sep).join('/')
+        nameMap[_road] = true
+    });
     let empty = () => { };
     // Dummy transformation context
     let context: ts.TransformationContext = {
@@ -70,8 +74,11 @@ export default function tsScan(fileList: string[]) {
     }
     const sourceFiles = program.getSourceFiles()!;
     sourceFiles.forEach(sourceFile => {
-        transform(sourceFile, [scanWord(typeChecker, sourceFile.fileName)])
-        return
+        const { fileName } = sourceFile
+        if (nameMap[fileName]) {
+            transform(sourceFile, [scanWord(typeChecker, fileName)])
+
+        }
     })
     return wordList;
 }

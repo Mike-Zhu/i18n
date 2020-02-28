@@ -4,7 +4,7 @@ import tsScan from './tsScan'
 import * as xlsx from 'xlsx'
 import { WordInfo } from './utils'
 
-export default function scan(fileNmae: string, output: string) {
+export default function scanDir(fileNmae: string, output: string) {
   const list = getDir(fileNmae, [])
   const zhObject = tsScan(list)
   exportFile(zhObject, output)
