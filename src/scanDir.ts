@@ -25,7 +25,7 @@ function exportFile(zhObjectList: WordInfo[], output: string) {
   xlsx.writeFile(wb, `${output}.xlsx`)
 }
 
-function getFile(fileName: string, fileList: string[]) {
+export function getFile(fileName: string, fileList: string[]) {
   let _fileList = fileList.slice();
   const TSValid = /.[t|j]s(x?)$/
   if (TSValid.test(fileName)) {
@@ -34,9 +34,13 @@ function getFile(fileName: string, fileList: string[]) {
   return _fileList
 }
 
-function getDir(pathName: string, fileList: string[]) {
-  const files = fs.readdirSync(pathName);
+export function getDir(pathName: string, fileList: string[]) {
+  const parentStats = fs.statSync(pathName);
   let _fileList = fileList.slice();
+  if (!parentStats.isDirectory()) {
+    return getFile(pathName, _fileList)
+  }
+  const files = fs.readdirSync(pathName);
   files.forEach(fileName => {
     const innerName = path.join(pathName, fileName);
     const stats = fs.statSync(innerName);
